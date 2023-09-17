@@ -3,7 +3,7 @@ CMPS 2200  Recitation 2
 """
 
 ### the only imports needed are here
-#from tabulate import tabulate
+import tabulate
 import time
 import math
 ###
@@ -57,12 +57,13 @@ def span_calc(n, a, b, f):
   f......a function that takes an integer and returns 
            the work done at each node 
 
-  Returns: the value of W(n).
+  Returns: the value of S(n).
   """
-  if n == 1:
+  if n == 0: 
+    return 0
+  elif n == 1:
     return 1
-  
-  return span_calc(n // b, a, b, f) + 1
+  return span_calc(n // b, a, b, f) + f(n)
   
   pass
 
@@ -122,10 +123,17 @@ def compare_span(span_fn1, span_fn2, sizes=[10, 20, 50, 100, 1000, 5000, 10000])
     # compute W(n) using current a, b, f
     result.append((
     n,
-    span_fn1,
-    span_fn2
+    span_fn1(n),
+    span_fn2(n)
     ))
   return result
+def test_compare_span():
+  def span_fn1(n):
+    return span_calc(n, 2, 3, lambda n: math.log(n))
+  def span_fn2(n):
+    return span_calc(n, 2, 3, lambda n : 1)
+  res = compare_span(span_fn1, span_fn2)
+  print_results(res)
 
 print("rdy")
 
